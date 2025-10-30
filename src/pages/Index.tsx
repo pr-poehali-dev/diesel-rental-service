@@ -57,9 +57,11 @@ function Index() {
                 <Icon name="Calculator" size={20} className="mr-2" />
                 Рассчитать стоимость
               </Button>
-              <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
-                <Icon name="Phone" size={20} className="mr-2" />
-                Связаться с нами
+              <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground" asChild>
+                <a href="https://wa.me/79282264638" target="_blank" rel="noopener noreferrer">
+                  <Icon name="MessageCircle" size={20} className="mr-2" />
+                  WhatsApp
+                </a>
               </Button>
             </div>
           </div>
@@ -298,11 +300,13 @@ function Index() {
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="p-3 bg-primary/10 rounded-lg">
-                    <Icon name="Clock" className="text-primary" size={24} />
+                    <Icon name="MessageCircle" className="text-primary" size={24} />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Режим работы</p>
-                    <p className="text-lg font-semibold text-foreground">24/7</p>
+                    <p className="text-sm text-muted-foreground">WhatsApp</p>
+                    <a href="https://wa.me/79282264638" target="_blank" rel="noopener noreferrer" className="text-lg font-semibold text-foreground hover:text-primary">
+                      +7 (928) 226-46-38
+                    </a>
                   </div>
                 </div>
               </CardContent>
