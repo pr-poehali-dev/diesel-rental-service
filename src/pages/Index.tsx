@@ -5,9 +5,35 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Icon from '@/components/ui/icon';
 
+const cityDistances: { [key: string]: { [key: string]: number } } = {
+  'Ростов-на-Дону': {
+    'Москва': 1090,
+    'Санкт-Петербург': 1820,
+    'Краснодар': 270,
+    'Волгоград': 470,
+    'Воронеж': 560,
+  },
+  'Москва': {
+    'Ростов-на-Дону': 1090,
+    'Санкт-Петербург': 710,
+    'Краснодар': 1360,
+    'Волгоград': 970,
+    'Воронеж': 520,
+  },
+};
+
 function Index() {
-  const [distance, setDistance] = useState('');
+  const [fromCity, setFromCity] = useState('Ростов-на-Дону');
+  const [toCity, setToCity] = useState('Москва');
+  const [distance, setDistance] = useState('1090');
   const [calculatedCost, setCalculatedCost] = useState<number | null>(null);
+
+  const handleCityChange = (from: string, to: string) => {
+    if (cityDistances[from] && cityDistances[from][to]) {
+      const dist = cityDistances[from][to];
+      setDistance(dist.toString());
+    }
+  };
 
   const calculateCost = () => {
     const dist = parseFloat(distance);
@@ -84,6 +110,42 @@ function Index() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="fromCity" className="text-foreground">Откуда</Label>
+                      <select
+                        id="fromCity"
+                        value={fromCity}
+                        onChange={(e) => {
+                          setFromCity(e.target.value);
+                          handleCityChange(e.target.value, toCity);
+                        }}
+                        className="w-full p-2 bg-input border border-border text-foreground rounded-md"
+                      >
+                        <option value="Ростов-на-Дону">Ростов-на-Дону</option>
+                        <option value="Москва">Москва</option>
+                      </select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="toCity" className="text-foreground">Куда</Label>
+                      <select
+                        id="toCity"
+                        value={toCity}
+                        onChange={(e) => {
+                          setToCity(e.target.value);
+                          handleCityChange(fromCity, e.target.value);
+                        }}
+                        className="w-full p-2 bg-input border border-border text-foreground rounded-md"
+                      >
+                        <option value="Москва">Москва</option>
+                        <option value="Санкт-Петербург">Санкт-Петербург</option>
+                        <option value="Краснодар">Краснодар</option>
+                        <option value="Волгоград">Волгоград</option>
+                        <option value="Воронеж">Воронеж</option>
+                        <option value="Ростов-на-Дону">Ростов-на-Дону</option>
+                      </select>
+                    </div>
+                  </div>
                   <div className="space-y-2">
                     <Label htmlFor="distance" className="text-foreground">Расстояние (км)</Label>
                     <Input
@@ -97,12 +159,24 @@ function Index() {
                   </div>
                   <Button onClick={calculateCost} className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
                     <Icon name="Calculator" size={20} className="mr-2" />
-                    Рассчитать
+                    Рассчитать стоимость
                   </Button>
                   {calculatedCost !== null && (
                     <div className="p-6 bg-secondary rounded-lg border border-border">
-                      <p className="text-sm text-muted-foreground mb-2">Стоимость доставки:</p>
-                      <p className="text-3xl font-bold text-primary">{calculatedCost.toLocaleString('ru-RU')} ₽</p>
+                      <div className="flex items-center justify-between mb-4">
+                        <div>
+                          <p className="text-sm text-muted-foreground">Маршрут:</p>
+                          <p className="font-semibold text-foreground">{fromCity} → {toCity}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-sm text-muted-foreground">Расстояние:</p>
+                          <p className="font-semibold text-foreground">{distance} км</p>
+                        </div>
+                      </div>
+                      <div className="pt-4 border-t border-border">
+                        <p className="text-sm text-muted-foreground mb-2">Стоимость доставки:</p>
+                        <p className="text-3xl font-bold text-primary">{calculatedCost.toLocaleString('ru-RU')} ₽</p>
+                      </div>
                     </div>
                   )}
                 </div>
